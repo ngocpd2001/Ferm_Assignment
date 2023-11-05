@@ -11,3 +11,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.confirmButton {
+  transition: all 0.2s;
+  height: 40px;
+  margin: 0 10px 0 0;
+  background-color: #3bc9db !important;
+}
+.confirmButton:hover {
+  background-color: #1098ad !important;
+}
+.closeButton {
+  transition: all 0.2s;
+  height: 40px;
+  margin: 0px;
+  background-color: #e03131 !important;
+}
+.closeButton:hover {
+  background-color: #ad2525 !important;
+}

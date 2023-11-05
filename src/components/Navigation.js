@@ -1,27 +1,91 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import {Navbar,NavItem,Icon} from 'react-materialize';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Navbar, Icon } from "react-materialize";
+import { signOut } from "firebase/auth";
+import { auth } from "../configs/firebase.configs";
+import { useNavigate } from "react-router-dom";
+function Navigation({ loading, setLoading }) {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+  const handleSignOut = () => {
+    signOut(auth);
+    setUser(null);
+    navigate("/dashboard");
+    localStorage.removeItem("userLogin");
+    setLoading(!loading);
+  };
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("userLogin")));
 
-function Navigation() {
+    // eslint-disable-next-line
+  }, [loading]);
   return (
-    <Navbar className='menu'
-    alignLinks="right"
-    brand={<span className='brand-logo'>FERCinema á </span>}
-    id="mobile-nav"
-    menuIcon={<Icon>Menu</Icon>}>
+    <Navbar
+      className="menu"
+      alignLinks="right"
+      brand={<span className="brand-logo">Một mình em Cinema</span>}
+      id="mobile-nav"
+      menuIcon={<Icon>Menu</Icon>}
+    >
       <ul>
-        <li><Link to='/'><Icon left>home</Icon>Home</Link>
+        <li>
+          <Link to="/">
+            <Icon left>home</Icon>Home
+          </Link>
         </li>
-        <li><Link to="/features"><Icon left>settings</Icon>Features</Link>
+
+        <li>
+          <Link to="/news">
+            <Icon left>newspaper</Icon>News
+          </Link>
         </li>
-        <li><Link to="/pricing"><Icon left>money</Icon>Pricing</Link>
+
+        <li>
+          <Link to="/contact">
+            <Icon left>contacts</Icon>Contact
+          </Link>
         </li>
-        <li><Link to="/news"><Icon left>newspaper</Icon>News</Link>
-        </li>
-        <li><Link to="/about"><Icon left>info_outline</Icon>About</Link>
-        </li>
-        <li><Link to="/contact"><Icon left>contacts</Icon>Contact</Link>
-        </li>
+        {user && (
+          <li>
+            <Link to="/addFilm">
+              <Icon left>playlist_add</Icon>Add Film
+            </Link>
+          </li>
+        )}
+        {user && (
+          <li>
+            <Link to="/dashboard">
+              <Icon left>dashboard</Icon>Dashboard
+            </Link>
+          </li>
+        )}
+        {user ? (
+          <>
+            <li>
+              <Link to="/">
+                <Icon left>account_circle</Icon>
+                {user.email}
+              </Link>
+            </li>
+            <li>
+              <button
+                className="btn btn-outline-dark w-100"
+                onClick={() => handleSignOut()}
+                style={{ width: "10%", background: "#333" }}
+              >
+                Log out
+              </button>
+            </li>
+          </>
+        ) : (
+          <li>
+            <li>
+              <Link to="/signIn">
+                <Icon left>contacts</Icon>Log In
+              </Link>
+            </li>
+          </li>
+        )}
       </ul>
       {/* <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav">
